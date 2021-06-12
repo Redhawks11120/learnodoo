@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="quanlykháchan.view_customer_hotel_user_rule" model="ir.rule">
+        <field name="domain_force">[(1,'=',1)]</field>
+    </record>
+</odoo>

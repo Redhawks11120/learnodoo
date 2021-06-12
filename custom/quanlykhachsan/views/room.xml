@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hotel_room_tree" model="ir.ui.view">
+            <field name="name">hotel_room_tree</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <tree string="Tree">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="type"/>
+                    <field name="status"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hotel_room_form" model="ir.ui.view">
+            <field name="name">hotel_room_form</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <form string="Field">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="images"/>
+                                <field name="name"/>
+                                <field name="price"/>
+                                <field name="code"/>
+                                <field name="type"/>
+                                <field name="status"/>
+
+                            </group>
+                            <group>
+                                <field name="view_room"/>
+                                <field name="bed_count"/>
+                                <field name="max_person"/>
+                                <field name="description"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hotel_room_search" model="ir.ui.view">
+            <field name="name">hotel_room_search</field>
+            <field name="model">hotel.room</field>
+            <field name="arch" type="xml">
+                <search string="Field">
+                    <field name="name"/>
+                    <field name="code"/>
+
+                    <separator/>
+                    <filter name="status_open" string="Open" domain="[('status', '=', 'open')]"/>
+                    <filter name="status_maintain" string="Maintain" domain="[('status', '=', 'maintain')]"/>
+                    <separator/>
+                    <filter name="type_vip" string="Vip" domain="[('type', '=', 'vip')]"/>
+                    <filter name="type_basic" string="Basic" domain="[('type', '=', 'basic')]"/>
+                    <separator/>
+                    <separator/>
+                    <filter name="max_person" string="Từ 10 người" domain="[('max_person', '>=', 10)]"/>
+                    <separator/>
+                    <group expand="0" string="Group By">
+                        <filter name="group_by_view" string="By View" context="{'group_by':'view_room'}"/>
+                        <filter name="type" string="By Type" context="{'group_by':'type'}"/>
+                        <filter name="group_by_status" string="Status" context="{'group_by':'status'}"/>
+                        <filter name="group_by_max_person" string="Max Person" context="{'group_by':'max_person'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="hotel_room_act" model="ir.actions.act_window">
+            <field name="name">Quản lý phòng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.room</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_id" ref="hotel_room_search"/>
+        </record>
+
+
+        <record id="hotel_booking_act" model="ir.actions.act_window">
+            <field name="name">Đặt phòng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.booking</field>
+            <field name="view_mode">tree,kanban,form</field>
+        </record>
+
+        <record id="hotel_booking_tree" model="ir.ui.view">
+            <field name="name">hotel_booking_tree</field>
+            <field name="model">hotel.booking</field>
+            <field name="arch" type="xml">
+                <tree string="Field">
+                    <field name="booking_id"/>
+                    <field name="booking_status"/>
+                    <field name="customer_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hotel_booking_kanban" model="ir.ui.view">
+            <field name="name">hotel_booking_kanban</field>
+            <field name="model">hotel.booking</field>
+            <field name="arch" type="xml">
+                <kanban string="Field">
+                    <field name="booking_id"/>
+                    <field name="booking_status"/>
+                    <field name="customer_name"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div>
+                                <div class="text-center">
+                                    <i class="fa fa-building" aria-hiden="true"></i>
+                                    <strong>
+                                        <field name="booking_id"/>
+                                    </strong>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 text">
+                                        <strong>Start:</strong>
+                                    </div>
+                                    <div class="col-xs-6 text">
+                                        <strong>End</strong>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-6 text">
+                                        <field name="days_check_in"/>
+                                    </div>
+                                    <div class="col-xs-6 text">
+                                        <field name="days_check_out"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="hotel_booking_form" model="ir.ui.view">
+            <field name="name">hotel_booking_form</field>
+            <field name="model">hotel.booking</field>
+            <field name="arch" type="xml">
+                <form string="Field">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="booking_id"/>
+                                <field name="customer_name"/>
+                                <field name="customer_phone"/>
+                                <field name="customer_id"/>
+                            </group>
+                            <group>
+                                <field name="booking_status"/>
+                                <field name="customer_person"/>
+                                <field name="days_check_in"/>
+                                <field name="days_check_out"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page name="Danh sách phòng">
+                                <field name="room_ids">
+                                    <tree editable="bottom">
+                                        <field name="room_name"/>
+                                        <field name="room_type"/>
+                                        <field name="room_view"/>
+                                        <field name="room_price"/>
+                                        <field name="room_code"/>
+                                        <field name="day_begin_use"/>
+                                        <field name="day_end_use"/>
+                                        <field name="room_status"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page name="Danh sách dịch vụ">
+                                <field name="service_ids">
+                                    <tree editable="bottom">
+                                        <field name="service_name"/>
+                                        <field name="description"/>
+                                        <field name="count"/>
+                                        <field name="price"/>
+                                        <field name="note"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hotel_customer_act" model="ir.actions.act_window">
+            <field name="name">Quản lý khách hàng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.customer</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="hotel_customer_tree" model="ir.ui.view">
+            <field name="name">hotel_customer_tree</field>
+            <field name="model">hotel.customer</field>
+            <field name="arch" type="xml">
+                <tree string="Customer_tree">
+                    <field name="customer_name"/>
+                    <field name="phone_number" groups="quanlykhachsan.group_hotel_manager"/>
+                    <field name="customer_email"/>
+                    <field name="customer_address"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hotel_customer_form" model="ir.ui.view">
+            <field name="name">hotel_customer_form</field>
+            <field name="model">hotel.customer</field>
+            <field name="arch" type="xml">
+                <form string="Customer_form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="portrait"/>
+                                <field name="customer_name"/>
+                                <field name="customer_id"/>
+                                <field name="customer_address"/>
+                            </group>
+                            <group>
+                                <field name="phone_number" groups="quanlykhachsan.group_hotel_manager"/>
+                                <field name="customer_email"/>
+                                <field name="visa_card"/>
+                                <field name="customer_birthday"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hotel_price_act" model="ir.actions.act_window">
+            <field name="name">Quản lý giá</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.price</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="hotel_price_tree" model="ir.ui.view">
+            <field name="name">hotel_price_tree</field>
+            <field name="model">hotel.price</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel price room tree">
+                    <field name="room_id"/>
+                    <field name="code_room"/>
+                    <field name="current_price"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hotel_price_form" model="ir.ui.view">
+            <field name="name">hotel_price_form</field>
+            <field name="model">hotel.price</field>
+            <field name="arch" type="xml">
+                <form string="Hotel price room form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="room_id"/>
+                                <field name="code_room"/>
+                                <field name="base_price"/>
+                                <field name="preferential_percent"/>
+                            </group>
+                            <group>
+                                <field name="days"/>
+                                <field name="price_service"/>
+                                <field name="current_price"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="hotel_status_act" model="ir.actions.act_window">
+            <field name="name">Lịch sử phòng</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hotel.status</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <record id="hotel_status_tree" model="ir.ui.view">
+            <field name="name">hotel_status_tree</field>
+            <field name="model">hotel.status</field>
+            <field name="arch" type="xml">
+                <tree string="Hotel status room tree">
+                    <field name="name_room"/>
+                    <field name="status_room"/>
+                    <field name="customer_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hotel_status_form" model="ir.ui.view">
+            <field name="name">hotel_status_form</field>
+            <field name="model">hotel.status</field>
+            <field name="arch" type="xml">
+                <form string="Hotel status room form">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name_room"/>
+                                <field name="status_room"/>
+                                <field name="customer_name"/>
+                            </group>
+                            <group>
+                                <field name="day_begin"/>
+                                <field name="day_end"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="update_status_invoice" model="ir.actions.server">
+            <field name="name">Mark as paid</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="quanlykhachsan.model_hotel_booking"/>
+            <field name="binding_model_id" ref="quanlykhachsan.model_hotel_booking"/>
+            <field name="state">code</field>
+            <field name="code">
+                if record:
+                    action = record.actions_mark_as_paid()
+            </field>
+        </record>
+
+        <menuitem id="hotel_menu" name="Quản lý khách sạn" sequence="1" groups="quanlykhachsan.group_hotel_user"/>
+        <menuitem id="hotel_room_menu" name="Room"
+                  parent="hotel_menu"
+                  action="hotel_room_act" sequence="1"
+                  groups="quanlykhachsan.group_hotel_user"
+        />
+        <menuitem id="hotel_customer_menu" name="Customer"
+                  parent="hotel_menu"
+                  action="hotel_customer_act" sequence="2"
+                  groups="quanlykhachsan.group_hotel_user"
+        />
+        <menuitem id="hotel_price_menu" name="Price"
+                  parent="hotel_menu"
+                  action="hotel_price_act" sequence="3"/>
+        <menuitem id="hotel_status_menu" name="Status"
+                  parent="hotel_menu"
+                  action="hotel_status_act" sequence="4"/>
+        <menuitem id="hotel_booking_menu" name="Booking"
+                  parent="hotel_menu"
+                  action="hotel_booking_act" sequence="5"/>
+
+    </data>
+</odoo>

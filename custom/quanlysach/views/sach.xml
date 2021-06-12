@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="quanlysach_sach_act" model="ir.actions.act_window">
+            <field name="name">Quản lý sách</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">quanlysach.sachcuatui</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="quanlysach_menu" name="Quản lý sách" sequence="1"/>
+            <menuitem id="quanlysach_sach_menu" name="Sách"
+                      parent="quanlysach_menu"
+                      action="quanlysach_sach_act" sequence="1"/>
+
+    </data>
+</odoo>
